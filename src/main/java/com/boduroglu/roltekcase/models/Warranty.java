@@ -2,7 +2,6 @@ package com.boduroglu.roltekcase.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.time.LocalDate;
 
 @Entity
@@ -18,7 +17,7 @@ public class Warranty {
     LocalDate purchaseDate;
 
     @Column(nullable = false)
-    int warrantyStatus = 2;
+    int warrantyStatus;
 
     @ManyToOne
     @JoinColumn(name = "device", nullable = false, unique = true)

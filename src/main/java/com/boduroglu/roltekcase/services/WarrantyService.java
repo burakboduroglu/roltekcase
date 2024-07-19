@@ -23,7 +23,8 @@ public class WarrantyService {
 
     public Warranty save(WarrantyCreateRequest warranty) {
         Warranty newWarranty = new Warranty();
-        newWarranty.setWarrantyStatus(warranty.getWarrantyStatus());
+        if(warranty.getWarrantyStatus() == 0) newWarranty.setWarrantyStatus(2);
+        else newWarranty.setWarrantyStatus(warranty.getWarrantyStatus());
         newWarranty.setDevice(warranty.getDevice());
         newWarranty.setPurchaseDate(warranty.getPurchaseDate());
 
