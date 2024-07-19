@@ -1,10 +1,10 @@
 package com.boduroglu.roltekcase.controllers;
 
-import com.boduroglu.roltekcase.dto.requests.DeviceCreateRequest;
+import com.boduroglu.roltekcase.dto.requests.device.DeviceCreateRequest;
+import com.boduroglu.roltekcase.dto.requests.device.DeviceUpdateRequest;
 import com.boduroglu.roltekcase.exceptions.DeviceNotFoundException;
 import com.boduroglu.roltekcase.models.Device;
 import com.boduroglu.roltekcase.services.DeviceService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +14,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/devices")
 public class DeviceController {
-    private DeviceService deviceService;
+    private final DeviceService deviceService;
 
     public DeviceController(DeviceService deviceService) {
         this.deviceService = deviceService;
     }
 
+    // Get all devices
     @GetMapping
     public  ResponseEntity<List<Device>> getAllDevices() {
         List<Device> devices = deviceService.findAll();
@@ -88,10 +89,19 @@ public class DeviceController {
         return ResponseEntity.status(HttpStatus.OK).body("Device with id " + serialNumber + " successfully deleted");
     }
 
+    // Update a device by id
+    @PatchMapping("/id/{id}")
+    public ResponseEntity<Device> updateDevice(@PathVariable Long id, @RequestBody DeviceUpdateRequest newDevice) {
+        Device device = deviceService.findById(id);
+        if (device == null) {
+            throw new DeviceNotFoundException("Device with id " + id + " not found");
+        }
+        deviceService.updateDeviceById(id, newDevice);
+        return ResponseEntity.status(HttpStatus.OK).body(device);
+    }
+
     // Exception handler
     @ExceptionHandler(DeviceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    private void handleDeviceNotFound() {
-
-    }
+    private void handleDeviceNotFound() {}
 }

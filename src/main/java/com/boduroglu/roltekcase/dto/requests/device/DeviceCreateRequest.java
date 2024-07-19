@@ -1,4 +1,4 @@
-package com.boduroglu.roltekcase.dto.requests;
+package com.boduroglu.roltekcase.dto.requests.device;
 
 import lombok.Data;
 

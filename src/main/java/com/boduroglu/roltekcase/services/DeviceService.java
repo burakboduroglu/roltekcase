@@ -1,16 +1,16 @@
 package com.boduroglu.roltekcase.services;
 
-import com.boduroglu.roltekcase.dto.requests.DeviceCreateRequest;
+import com.boduroglu.roltekcase.dto.requests.device.DeviceCreateRequest;
+import com.boduroglu.roltekcase.dto.requests.device.DeviceUpdateRequest;
 import com.boduroglu.roltekcase.models.Device;
 import com.boduroglu.roltekcase.repositories.DeviceRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class DeviceService {
-    private DeviceRepository deviceRepository;
+    private final DeviceRepository deviceRepository;
 
     public DeviceService(DeviceRepository deviceRepository) {
         this.deviceRepository = deviceRepository;
@@ -51,5 +51,14 @@ public class DeviceService {
     public void deleteBySerialNumber(Long serialNumber) {
        Device device = deviceRepository.findBySerialNumber(serialNumber);
        deviceRepository.deleteById(device.getId());
+    }
+
+    // Update a device by id
+    public void updateDeviceById(Long id, DeviceUpdateRequest newDeviceRequest) {
+        Device device = findById(id);
+        newDeviceRequest.getBrand().ifPresent(device::setBrand);
+        newDeviceRequest.getModel().ifPresent(device::setModel);
+        newDeviceRequest.getSerialNumber().ifPresent(device::setSerialNumber);
+        deviceRepository.save(device);
     }
 }
