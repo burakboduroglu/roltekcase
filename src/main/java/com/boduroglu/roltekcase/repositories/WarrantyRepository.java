@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WarrantyRepository extends JpaRepository<Warranty, Long> {
     Warranty findWarrantyById(Long id);
-
 }

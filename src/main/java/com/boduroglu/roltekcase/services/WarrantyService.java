@@ -1,27 +1,46 @@
 package com.boduroglu.roltekcase.services;
 
+import com.boduroglu.roltekcase.dto.requests.warranty.WarrantyCreateRequest;
+import com.boduroglu.roltekcase.models.Device;
 import com.boduroglu.roltekcase.models.Warranty;
 import com.boduroglu.roltekcase.repositories.WarrantyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class WarrantyService {
-    @Autowired
-    WarrantyRepository warrantyRepository;
-    @Autowired
-    DeviceService deviceService;
+    private final WarrantyRepository warrantyRepository;
+    private final DeviceService deviceService;
 
     public WarrantyService(WarrantyRepository warrantyRepository, DeviceService deviceService) {
         this.warrantyRepository = warrantyRepository;
         this.deviceService = deviceService;
     }
 
-    public Warranty save(Warranty warranty) {
-        return warrantyRepository.save(warranty);
+    public List<Warranty> getAllWarranties() {
+        return warrantyRepository.findAll();
     }
 
-    public Warranty getWarrantyByDeviceId(Long id) {
+    public Warranty save(WarrantyCreateRequest warranty) {
+        Device deviceId = deviceService.findById(warranty.getDevice().getId());
+        if (deviceId != null ) {
+            return null;
+        }
+        Warranty newWarranty = new Warranty();
+        newWarranty.setWarrantyStatus(warranty.getWarrantyStatus());
+        newWarranty.setDevice(warranty.getDevice());
+        newWarranty.setPurchaseDate(warranty.getPurchaseDate());
+
+        return warrantyRepository.save(newWarranty);
+    }
+
+    public Warranty getWarrantyById(Long id) {
         return warrantyRepository.findWarrantyById(id);
+    }
+
+    public String getWarrantyStatusById(Long id) {
+        Warranty warranty = getWarrantyById(id);
+        return warranty.getWarrantyStatus();
     }
 }

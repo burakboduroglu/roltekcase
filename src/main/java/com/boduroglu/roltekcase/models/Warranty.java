@@ -22,6 +22,6 @@ public class Warranty {
     String warrantyStatus;
 
     @ManyToOne
-    @JoinColumn(name = "deviceId", nullable = false)
-    Device deviceId;
+    @JoinColumn(name = "device", nullable = false, unique = true)
+    Device device;
 }
