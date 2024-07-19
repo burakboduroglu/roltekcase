@@ -1,21 +1,20 @@
 package com.boduroglu.roltekcase.services;
 
 import com.boduroglu.roltekcase.dto.requests.warranty.WarrantyCreateRequest;
-import com.boduroglu.roltekcase.models.Device;
 import com.boduroglu.roltekcase.models.Warranty;
 import com.boduroglu.roltekcase.repositories.WarrantyRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
 public class WarrantyService {
     private final WarrantyRepository warrantyRepository;
-    private final DeviceService deviceService;
 
-    public WarrantyService(WarrantyRepository warrantyRepository, DeviceService deviceService) {
+    public WarrantyService(WarrantyRepository warrantyRepository) {
         this.warrantyRepository = warrantyRepository;
-        this.deviceService = deviceService;
     }
 
     public List<Warranty> getAllWarranties() {
@@ -23,10 +22,6 @@ public class WarrantyService {
     }
 
     public Warranty save(WarrantyCreateRequest warranty) {
-        Device deviceId = deviceService.findById(warranty.getDevice().getId());
-        if (deviceId != null ) {
-            return null;
-        }
         Warranty newWarranty = new Warranty();
         newWarranty.setWarrantyStatus(warranty.getWarrantyStatus());
         newWarranty.setDevice(warranty.getDevice());
@@ -41,6 +36,15 @@ public class WarrantyService {
 
     public String getWarrantyStatusById(Long id) {
         Warranty warranty = getWarrantyById(id);
-        return warranty.getWarrantyStatus();
+        return calculateWarrantyStatusByWarranty(warranty);
+
+    }
+
+    public String calculateWarrantyStatusByWarranty(Warranty warranty) {
+       long remainTime = ChronoUnit.YEARS.between(warranty.getPurchaseDate(), LocalDate.now());
+       if(remainTime <= warranty.getWarrantyStatus()){
+        return "Warranty: " + remainTime + " years";
+       }
+       return  "Warranty over: " + remainTime + " years";
     }
 }

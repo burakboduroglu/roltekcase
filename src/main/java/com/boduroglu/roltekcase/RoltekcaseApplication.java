@@ -9,5 +9,4 @@ public class RoltekcaseApplication {
     public static void main(String[] args) {
         SpringApplication.run(RoltekcaseApplication.class, args);
     }
-
 }

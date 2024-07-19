@@ -38,11 +38,11 @@ public class WarrantyController {
     }
 
     @GetMapping("/status/{id}")
-    public ResponseEntity<Warranty> getWarrantyById(@PathVariable Long id) {
+    public ResponseEntity<String> getWarrantyById(@PathVariable Long id) {
         String status = warrantyService.getWarrantyStatusById(id);
         if (status == null) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(warrantyService.getWarrantyById(id));
+        return ResponseEntity.status(HttpStatus.OK).body(status);
     }
 }

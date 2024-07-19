@@ -18,8 +18,7 @@ public class Warranty {
     LocalDate purchaseDate;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    String warrantyStatus;
+    int warrantyStatus = 2;
 
     @ManyToOne
     @JoinColumn(name = "device", nullable = false, unique = true)

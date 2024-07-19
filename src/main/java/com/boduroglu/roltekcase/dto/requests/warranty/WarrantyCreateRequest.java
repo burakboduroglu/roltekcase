@@ -9,6 +9,6 @@ import java.time.LocalDate;
 @Data
 public class WarrantyCreateRequest {
     LocalDate purchaseDate;
-    String warrantyStatus;
+    int warrantyStatus;
     Device device;
 }
