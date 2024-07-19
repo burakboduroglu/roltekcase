@@ -17,35 +17,40 @@ public class WarrantyService {
         this.warrantyRepository = warrantyRepository;
     }
 
+    // Get all warranties
     public List<Warranty> getAllWarranties() {
         return warrantyRepository.findAll();
     }
 
+    // Create warranty for device
     public Warranty save(WarrantyCreateRequest warranty) {
         Warranty newWarranty = new Warranty();
-        if(warranty.getWarrantyStatus() == 0) newWarranty.setWarrantyStatus(2);
-        else newWarranty.setWarrantyStatus(warranty.getWarrantyStatus());
+        newWarranty.setWarrantyStatus(warranty.getWarrantyStatus());
         newWarranty.setDevice(warranty.getDevice());
         newWarranty.setPurchaseDate(warranty.getPurchaseDate());
 
         return warrantyRepository.save(newWarranty);
     }
 
+    // Get warranty by id
     public Warranty getWarrantyById(Long id) {
         return warrantyRepository.findWarrantyById(id);
     }
 
+    // Get warranty status
     public String getWarrantyStatusById(Long id) {
         Warranty warranty = getWarrantyById(id);
         return calculateWarrantyStatusByWarranty(warranty);
 
     }
 
+    // Calculate remaining time to warranty
     public String calculateWarrantyStatusByWarranty(Warranty warranty) {
        long remainTime = ChronoUnit.YEARS.between(warranty.getPurchaseDate(), LocalDate.now());
-       if(remainTime <= warranty.getWarrantyStatus()){
-        return "Warranty: " + remainTime + " years";
+       if(remainTime < 2){
+        return "Warranty continues: " + remainTime + " years";
        }
+       warranty.setWarrantyStatus(false);
        return  "Warranty over: " + remainTime + " years";
     }
 }

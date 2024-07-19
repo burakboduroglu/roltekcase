@@ -17,7 +17,7 @@ public class Warranty {
     LocalDate purchaseDate;
 
     @Column(nullable = false)
-    int warrantyStatus;
+    Boolean warrantyStatus;
 
     @ManyToOne
     @JoinColumn(name = "device", nullable = false, unique = true)
